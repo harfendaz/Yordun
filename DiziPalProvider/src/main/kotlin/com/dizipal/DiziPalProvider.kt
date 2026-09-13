@@ -93,8 +93,8 @@ class DiziPalProvider : MainAPI() {
                 val epHref = epEl.selectFirst("a")?.attr("href") ?: return@forEachIndexed
                 val epTitle = epEl.text().trim()
                 
-                val seasonMatch = Regex("(\d+)\.?\s*[Ss]ezon|S(\d+)").find(epTitle)
-                val episodeMatch = Regex("(\d+)\.?\s*[Bb]ölüm|E(\d+)").find(epTitle)
+                val seasonMatch = Regex("(\\d+)\\.?\\s*[Ss]ezon|S(\\d+)").find(epTitle)
+                val episodeMatch = Regex("(\\d+)\\.?\\s*[Bb]ölüm|E(\\d+)").find(epTitle)
 
                 val seasonNum = seasonMatch?.groupValues?.drop(1)?.firstOrNull { it.isNotBlank() }?.toIntOrNull() ?: 1
                 // Fallback to index if episode number cannot be parsed

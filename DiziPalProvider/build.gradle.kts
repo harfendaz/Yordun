@@ -31,11 +31,7 @@ cloudstream {
 }
 
 dependencies {
-    val cloudstream = configurations.getByName("cloudstream")
-
-    cloudstream.dependencies.add(
-        project.dependencies.create("com.lagradost:cloudstream3:pre-release")
-    )
-
-    implementation("org.jsoup:jsoup:1.17.2")
+    implementation("com.github.recloudstream.cloudstream:library:-SNAPSHOT")
+    implementation("com.github.Blatzar:NiceHttp:0.4.11")
+    implementation("org.jsoup:jsoup:1.18.3")
 }
