@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.dizipal"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 21
@@ -25,13 +25,13 @@ android {
 cloudstream {
     language = "tr"
     description = "DiziPal provider for Turkish TV series and movies"
-    authors = listOf("YourName")
-    type = com.lagradost.cloudstream3.gradle.PluginType.Provider
+    authors = listOf("harfendaz")
 }
 
 dependencies {
-    val cloudstream3Version = "master-SNAPSHOT"
-    implementation("com.github.recloudstream:cloudstream3:$cloudstream3Version")
-    implementation("com.github.recloudstream:javagg:1.0.1")
+    val cloudstream by configurations
+
+    cloudstream("com.lagradost:cloudstream3:pre-release")
+
     implementation("org.jsoup:jsoup:1.17.2")
 }
