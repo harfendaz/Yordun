@@ -17,8 +17,9 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-    kotlinOptions {
-        jvmTarget = "11"
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
     }
 }
 
@@ -29,9 +30,11 @@ cloudstream {
 }
 
 dependencies {
-    val cloudstream by configurations
+    val cloudstream = configurations.getByName("cloudstream")
 
-    cloudstream("com.lagradost:cloudstream3:pre-release")
+    cloudstream.dependencies.add(
+        project.dependencies.create("com.lagradost:cloudstream3:pre-release")
+    )
 
     implementation("org.jsoup:jsoup:1.17.2")
 }
