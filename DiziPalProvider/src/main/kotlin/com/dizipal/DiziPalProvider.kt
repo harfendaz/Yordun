@@ -28,20 +28,32 @@ class DiziPalProvider : MainAPI() {
         }
     }
 
-    override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
-        val targetUrl = "$mainUrl/${request.data}"
-        val response = app.get(targetUrl)
-        updateMainUrl(response.url)
-        val document = response.document
+   override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
+    val targetUrl = "$mainUrl/${request.data}"
+    val response = app.get(targetUrl)
+    updateMainUrl(response.url)
+    val document = response.document
 
-        val items = document.select("div.single-item, article.item, div.post-item").mapNotNull { element ->
-            val title = element.selectFirst("h2, h3, .title, .name")?.text()?.trim() ?: return@mapNotNull null
-            val href = element.selectFirst("a")?.attr("href") ?: return@mapNotNull null
-            val posterUrl = element.selectFirst("img")?.attr("data-src")
-                ?: element.selectFirst("img")?.attr("src")
+    val items = document
+        .select("a[title][href]:has(div.poster)")
+        .mapNotNull { element ->
+            val title = element.attr("title").trim()
+            val href = element.attr("href").trim()
 
-            val isTv = href.contains("/dizi/") || request.name.contains("Dizi") || request.name.contains("Bölüm")
-            
+            if (title.isBlank() || href.isBlank()) {
+                return@mapNotNull null
+            }
+
+            val posterUrl = element.selectFirst("img")?.let { img ->
+                img.attr("src").ifBlank {
+                    img.attr("data-src")
+                }
+            }
+
+            val isTv = href.contains("/dizi/") ||
+                    request.name.contains("Dizi") ||
+                    request.name.contains("Bölüm")
+
             if (isTv) {
                 newTvSeriesSearchResponse(title, fixUrl(href), TvType.TvSeries) {
                     this.posterUrl = fixUrlNull(posterUrl)
@@ -52,8 +64,9 @@ class DiziPalProvider : MainAPI() {
                 }
             }
         }
-        return newHomePageResponse(request.name, items)
-    }
+
+    return newHomePageResponse(request.name, items)
+}
 
     override suspend fun search(query: String): List<SearchResponse> {
         // Fallback to standard HTML search to avoid JSON parsing issues if API changes
