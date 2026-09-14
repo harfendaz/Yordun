@@ -18,18 +18,39 @@ jobs:
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          distribution: zulu
+          distribution: 'zulu'
           java-version: '17'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      - name: Build CloudStream Extension
+      - name: Build CloudStream Extensions
         run: gradle make makePluginsJson
 
-      - name: Deploy Build
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: builds
-          publish_dir: ./build
+      - name: Prepare build output
+        run: |
+          mkdir -p "$RUNNER_TEMP/cloudstream-builds"
+
+          find . -path '*/build/*.cs3' \
+            -exec cp {} "$RUNNER_TEMP/cloudstream-builds/" \;
+
+          cp build/plugins.json "$RUNNER_TEMP/cloudstream-builds/plugins.json"
+
+          echo "Files to publish:"
+          ls -lah "$RUNNER_TEMP/cloudstream-builds"
+
+      - name: Publish builds branch
+        run: |
+          output="$RUNNER_TEMP/cloudstream-builds"
+
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+
+          git checkout --orphan builds
+          git rm -rf .
+
+          cp "$output"/* .
+
+          git add ./*.cs3 plugins.json
+          git commit -m "Build $GITHUB_SHA"
+          git push --force origin builds
