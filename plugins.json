@@ -1,0 +1,18 @@
+[
+    {
+        "url": "https://raw.githubusercontent.com/harfendaz/Yordun/builds/DiziPalProvider.cs3",
+        "status": 3,
+        "version": -1,
+        "name": "DiziPalProvider",
+        "internalName": "DiziPalProvider",
+        "authors": [
+            "harfendaz"
+        ],
+        "description": "DiziPal",
+        "fileSize": 13433,
+        "repositoryUrl": "https://github.com/harfendaz/Yordun",
+        "language": "tr",
+        "apiVersion": 1,
+        "fileHash": "sha256-07348f87ba9971d0656a3419ab9c64f1f3c70180b3dd64eac990015bee40dc5f"
+    }
+]
