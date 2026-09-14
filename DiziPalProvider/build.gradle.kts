@@ -26,8 +26,9 @@ kotlin {
 
 cloudstream {
     language = "tr"
-    description = "DiziPal provider for Turkish TV series and movies"
+    description = "DiziPal"
     authors = listOf("harfendaz")
+    setRepo("harfendaz/Yordun")
 }
 
 dependencies {
